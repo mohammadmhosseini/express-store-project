@@ -13,6 +13,8 @@
     "auto-bind": "^4.0.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.4.4"
+    "http-errors": "^2.0.0",
+    "mongoose": "^6.4.4",
+    "morgan": "^1.10.0"
   }
 }

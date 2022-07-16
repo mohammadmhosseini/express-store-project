@@ -9,7 +9,9 @@ module.exports = class Application{
         this.errorHandling();
     }
     configApplication(){
-        const path = require("path")
+        const path = require("path");
+        const morgan = require("morgan");
+        this.#app.use(morgan("dev"));
         this.#app.use(this.#express.json());
         this.#app.use(this.#express.urlencoded({ extended : true }));
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")));
@@ -17,8 +19,18 @@ module.exports = class Application{
     connectToMongoDB(DB_URL){
         const mongoose = require("mongoose");
         mongoose.connect(DB_URL, (error) => {
-            if(error) return console.log("Failed to connect to DB!!!");
+            if(error) return console.log(error.message);
             return console.log("Connect to MongoDB successfully...");
+        });
+        mongoose.connection.on("connected", () => {
+            console.log("mongoose connect to DB.");
+        });
+        mongoose.connection.on("disconnected", () => {
+            console.log("mongoose disconnected!");
+        });
+        process.on("SIGINT", async() => {
+            await mongoose.connection.close();
+            process.exit(0);
         })
     }
     createServer(PORT){
