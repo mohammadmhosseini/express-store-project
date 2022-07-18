@@ -3,6 +3,7 @@ module.exports = class Application{
     #app = this.#express();
     constructor(PORT, DB_URL){
         this.connectToMongoDB(DB_URL);
+        this.initRedis();
         this.createServer(PORT);
         this.configApplication();
         this.createRoutes();
@@ -11,10 +12,33 @@ module.exports = class Application{
     configApplication(){
         const path = require("path");
         const morgan = require("morgan");
+        const swaggerUI = require("swagger-ui-express");
+        const swaggerJsDoc = require("swagger-jsdoc");
+        const cors = require("cors");
+        this.#app.use(cors());
         this.#app.use(morgan("dev"));
         this.#app.use(this.#express.json());
         this.#app.use(this.#express.urlencoded({ extended : true }));
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")));
+        this.#app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc({
+            swaggerDefinition : {
+                info : {
+                    title : "Store Application",
+                    version : "1.0.0",
+                    description : "فروشگاه خرید محصولات فیزیکی و مجازی",
+                    contact : {
+                        name : "Mohammad Mahdi Hosseini",
+                        email : "moh79hosseini@gmail.com"
+                    }
+                },
+                servers : [
+                    {
+                        url : "http://localhost:5000",
+                    },
+                ],
+            },
+            apis : ["./app/router/**/*.js"]
+        })))
     }
     connectToMongoDB(DB_URL){
         const mongoose = require("mongoose");
@@ -33,6 +57,9 @@ module.exports = class Application{
             process.exit(0);
         })
     }
+    initRedis(){
+        require("./utils/init_redis");
+    }
     createServer(PORT){
         const http = require("http");
         const server = http.createServer(this.#app);
@@ -45,20 +72,19 @@ module.exports = class Application{
         this.#app.use(AllRoutes);
     }
     errorHandling(){
+        const createError = require("http-errors");
         this.#app.use((req, res, next) => {
-            return res.status(404).json({
-                status : 404,
-                success : false,
-                message : "مسیر مورد نظر یافت نشد"
-            })
+            next(createError.NotFound("مسیر مورد نظر یافت نشد"));
         });
         this.#app.use((error, req, res, next) => {
-            const status = error?.static || 500;
-            const message = error?.message || "InternalServerError";
+            const serverError = createError.InternalServerError();
+            const status = error?.status || serverError.status;
+            const message = error?.message || serverError.message;
             return res.status(status).json({
-                status,
-                success: false,
-                message
+                errors : {
+                    status,
+                    message
+                }
             })
         });
     }
