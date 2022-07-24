@@ -3,6 +3,8 @@ const createError = require("http-errors");
 const { UserModel } = require("../models/user");
 const { ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY } = require("./contants");
 const redisClient = require("./init_redis");
+const path = require("path");
+const fs = require("fs");
 
 function randomNumberGen(){
     return Math.floor((Math.random() * 90000) + 10000);
@@ -16,7 +18,7 @@ function signAccessToken(userId){
         };
         const secret = ACCESS_TOKEN_SECRET_KEY;
         const options = {
-            expiresIn : "1h"
+            expiresIn : "1d"
         };
         JWT.sign(payload, secret, options, (err, token) => {
             if(err) reject(createError.InternalServerError("خطای سروری"));
@@ -55,9 +57,17 @@ function vreifyRefreshToken(token){
     })
 }
 
+function deleteFileInPublic(fileAddress){
+    if(fileAddress){
+        const filePath = path.join(__dirname, "..", "..", "public", fileAddress);
+        if(fs.existsSync(filePath)) return fs.unlinkSync(filePath);
+    }
+}
+
 module.exports = {
     randomNumberGen,
     signAccessToken,
     signRefreshToken,
-    vreifyRefreshToken
+    vreifyRefreshToken,
+    deleteFileInPublic
 };

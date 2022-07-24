@@ -22,6 +22,7 @@ module.exports = class Application{
         this.#app.use(this.#express.static(path.join(__dirname, "..", "public")));
         this.#app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerJsDoc({
             swaggerDefinition : {
+                openapi: "3.0.0",
                 info : {
                     title : "Store Application",
                     version : "1.0.0",
@@ -36,9 +37,22 @@ module.exports = class Application{
                         url : "http://localhost:5000",
                     },
                 ],
+                components:{
+                    securitySchemes: {
+                        BearerAuth: {
+                            type: "http",
+                            scheme: "bearer",
+                            bearerFormat: "JWT"
+                        }
+                    }
+                },
+                security: [{ BearerAuth : [] }]
             },
             apis : ["./app/router/**/*.js"]
-        })))
+        }),
+        {
+            explorer : true
+        }))
     }
     connectToMongoDB(DB_URL){
         const mongoose = require("mongoose");
