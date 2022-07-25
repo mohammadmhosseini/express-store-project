@@ -5,7 +5,7 @@ const router = require("express").Router();
  * @swagger
  * components:
  *  schemas:
- *      AddCategory:
+ *      UpsertCategory:
  *          type: object
  *          required:
  *              -   title
@@ -35,10 +35,10 @@ const router = require("express").Router();
  *          content:
  *              application/x-www-form-urlencoded:
  *                  schema:
- *                      $ref: '#/components/schemas/AddCategory'
+ *                      $ref: '#/components/schemas/UpsertCategory'
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/AddCategory'
+ *                      $ref: '#/components/schemas/UpsertCategory'
  *      responses:
  *          201:
  *              description: success
@@ -171,20 +171,19 @@ router.get("/:id", CategoryController.getCategoryById);
  *      tags: [Category(Admin-Panel)]
  *      summary: edit or update category title with Id
  *      parameters:
- *      -   name: access-token
- *          in: header
- *          type: string
- *          value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM1MzE2NDY4NyIsImlhdCI6MTY1ODY0NDUzMSwiZXhwIjoxNjU4NzMwOTMxfQ.VYf5dncdWnT77Rh0s7M4IF4bwCWoW4TlhWeuVNp1KKM
- *          required: true
- *          example: Bearer Your token...
  *      -   name: id
  *          in: path
  *          type: string
  *          required: true
- *      -   name: title
- *          in: formData
- *          type: string
+ *      requestBody:
  *          required: true
+ *          content:
+ *              application/x-www-form-data:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpsertCategory'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpsertCategory'
  *      responses:
  *          200:
  *              description: success
@@ -192,6 +191,7 @@ router.get("/:id", CategoryController.getCategoryById);
  *              description: InternalServerError
  */
 router.patch("/update/:id", CategoryController.editCategoryTitle);
+
 module.exports = {
     CategoryRoutes : router,
 };
