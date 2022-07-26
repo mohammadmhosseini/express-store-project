@@ -4,6 +4,7 @@ const path = require("path");
 const { BlogModel } = require("../../../models/blog");
 const createError = require("http-errors");
 const { deleteFileInPublic } = require("../../../utils/functions");
+const { StatusCodes } = require("http-status-codes");
 
 class BlogController extends Controller{
     async createBlog(req, res, next){
@@ -23,9 +24,9 @@ class BlogController extends Controller{
                 image: req.body.image
             })
             if(!result) throw createError.InternalServerError("بلاگ جدید ایجاد نشد");
-            return res.status(201).json({
+            return res.status(StatusCodes.CREATED).json({
                 data: {
-                    statusCode: 201,
+                    statusCode: StatusCodes.CREATED,
                     message: "بلاگ جدید با موفقیت ایجاد شد"
                 }
             });
@@ -53,9 +54,9 @@ class BlogController extends Controller{
             });
             const updateResult = await BlogModel.updateOne({_id : id}, {$set: data});
             if(updateResult.modifiedCount == 0) throw createError.InternalServerError("به روزرسانی انجام نشد");
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
-                    statusCode: 200,
+                    statusCode: StatusCodes.OK,
                     message: "به روزرسانی باموفقیت انجام شد"
                 }
             });
@@ -70,9 +71,9 @@ class BlogController extends Controller{
             await this.findBlog({_id : id});
             const result = await BlogModel.deleteOne({_id: id});
             if(result.deletedCount == 0) throw createError.InternalServerError("حذف مقاله انجام نشد");
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
-                    statusCode: 200,
+                    statusCode: StatusCodes.OK,
                     message: "حذف مقاله با موفقیت انجام شد"
                 }
             });
@@ -117,9 +118,9 @@ class BlogController extends Controller{
                     }
                 }
             ])
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
-                    statusCode: 200,
+                    statusCode: StatusCodes.OK,
                     blogs
                 }
             });
@@ -131,9 +132,9 @@ class BlogController extends Controller{
         try {
             const { id } = req.params;
             const blog = await this.findBlog({_id : id});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
-                    statusCode : 200,
+                    statusCode : StatusCodes.OK,
                     blog
                 }
             });

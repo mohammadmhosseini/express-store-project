@@ -57,11 +57,36 @@ function vreifyRefreshToken(token){
     })
 }
 
-function deleteFileInPublic(fileAddress){
+function deleteFileInPublic(...fileAddress){
     if(fileAddress){
         const filePath = path.join(__dirname, "..", "..", "public", fileAddress);
         if(fs.existsSync(filePath)) return fs.unlinkSync(filePath);
     }
+}
+
+function listOfImagesFromRequest(files, fileUploadPath){
+    if(files?.length > 0){
+        return ((files.map(file => path.join(fileUploadPath, file.filename))).map(item => item.replace(/\\/g, "/")));
+    }else{
+        return [];
+    }
+}
+
+function setFeatures(body){
+    const { width, height, weight, length, colors } = body;
+    let features = {};
+    features.colors = colors
+    if(!isNaN(+width) || !isNaN(+length) || !isNaN(+height) || !isNaN(+weight)){
+        if(!width) features.width = 0;
+        else features.width = +width;
+        if(!height) features.height = 0;
+        else features.height = +height;
+        if(!length) features.length = 0;
+        else features.length = +length;
+        if(!weight) features.weight = 0;
+        else features.weight = +weight;
+    }
+    return features;
 }
 
 module.exports = {
@@ -69,5 +94,7 @@ module.exports = {
     signAccessToken,
     signRefreshToken,
     vreifyRefreshToken,
-    deleteFileInPublic
+    deleteFileInPublic,
+    listOfImagesFromRequest,
+    setFeatures
 };

@@ -15,6 +15,7 @@ const Schema = new mongoose.Schema({
     discount : {type: Number, default : 0},
     birthday : {type: String},
     role : {type: [String], default : ["USER"]},
+    courses : {type: [mongoose.Types.ObjectId], default : [], ref : "course"}
 });
 
 module.exports = {

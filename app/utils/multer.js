@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 
 function fileFilter(req, file, cb){
     const ext = path.extname(file.originalname);
-    const mimtypes = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+    const mimtypes = [".jpg", ".jpeg", ".png", ".PNG", ".gif", ".webp"];
     if(mimtypes.includes(ext)) return cb(null, true);
     return cb(createError.BadRequest("فرمت تصویر ارسال شده نادرست است"));
 }

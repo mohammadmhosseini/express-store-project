@@ -3,6 +3,7 @@ const { CategorySchema } = require("../../validators/admin/category.schema");
 const createError = require("http-errors");
 const Controller = require("../controller");
 const mongoose = require("mongoose");
+const { StatusCodes } = require("http-status-codes");
 
 class CategoryController extends Controller{
     async addCategory(req, res, next){
@@ -14,9 +15,9 @@ class CategoryController extends Controller{
                 parent
             });
             if(!result) throw createError.InternalServerError("خطای داخلی");
-            return res.status(201).json({
+            return res.status(StatusCodes.CREATED).json({
                 data : {
-                    statusCode : 201,
+                    statusCode : StatusCodes.CREATED,
                     success : true,
                     message : "دسته بندی با موفقیت افزوده شد"
                 }
@@ -32,9 +33,9 @@ class CategoryController extends Controller{
             await this.checkExistCategory(id);
             const updateResult = await CategoryModel.updateOne({_id : id}, {$set : {title}});
             if(updateResult.modifiedCount == 0) throw createError.InternalServerError("به روزرسانی انجام نشد");
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 dats: {
-                    statusCode : 200,
+                    statusCode : StatusCodes.OK,
                     success : true,
                     message : "به روز رسانی باموفقیت انجام شد"
                 }
@@ -54,9 +55,9 @@ class CategoryController extends Controller{
                 ]
             });
             if(deletedResult.deletedCount == 0) throw createError.InternalServerError("حذف دسته بندی با خطا مواجه شد");
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
-                    statusCode: 200,
+                    statusCode: StatusCodes.OK,
                     success : true,
                     message : "دسته بندی با موفقیت حذف شد"
                 }
@@ -113,7 +114,7 @@ class CategoryController extends Controller{
             ]); */
             
             const categories = await CategoryModel.find({parent : undefined}, {__v : 0});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
                     categories
                 }
@@ -149,9 +150,9 @@ class CategoryController extends Controller{
                 }
             ]); */
             const category = await CategoryModel.findOne({_id : id}, {__v : 0});
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data : {
-                    statusCode: 200,
+                    statusCode: StatusCodes.OK,
                     category
                 }
             });
@@ -162,7 +163,7 @@ class CategoryController extends Controller{
     async getAllParents(req, res, next){
         try {
             const parents = await CategoryModel.find({parent : undefined}, { __v : 0 });
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
                     parents
                 }
@@ -175,7 +176,7 @@ class CategoryController extends Controller{
         try {
             const { parent } = req.params;
             const childs = await CategoryModel.find({parent}, { __v : 0, parent : 0 });
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
                     childs
                 }
@@ -191,7 +192,7 @@ class CategoryController extends Controller{
                     $match : {}
                 }
             ]);
-            return res.status(200).json({
+            return res.status(StatusCodes.OK).json({
                 data: {
                     categories
                 }
