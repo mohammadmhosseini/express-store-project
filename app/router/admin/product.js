@@ -89,10 +89,76 @@ const router = require("express").Router();
 
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          EditProduct:
+ *              type : object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: the title of product 
+ *                  short_text:
+ *                      type: string
+ *                      description: the summary of text of product 
+ *                  text:
+ *                      type: string
+ *                      description: the text of product 
+ *                  category:
+ *                      type: string
+ *                      description: the category of product 
+ *                      example: 62d5474a92edd949cc880f7d
+ *                  tags:
+ *                      type: array
+ *                      description: the tags of product 
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
+ *                  price:
+ *                      type: string
+ *                      description: the price of product
+ *                  discount:
+ *                      type: string
+ *                      description: the discount of product
+ *                  count:
+ *                      type: string
+ *                      description: the counts of product
+ *                  width:
+ *                      type: string
+ *                      description: the width of product
+ *                      example: 0
+ *                  height:
+ *                      type: string
+ *                      description: the height of product
+ *                      example: 0
+ *                  weight:
+ *                      type: string
+ *                      description: the weight of product
+ *                      example: 0
+ *                  length:
+ *                      type: string
+ *                      description: the length of product
+ *                      example: 0
+ *                  type:
+ *                      type: string
+ *                      description: the type of product
+ *                      example: virtual - physical
+ *                  colors:
+ *                      $ref: '#/components/schemas/Color'
+ */
+
+/**
+ * @swagger
  * /admin/product/list:
  *  get:
  *      tags: [Product(Admin-Panel)]
  *      summary: get all products
+ *      parameters:
+ *          -   name: search
+ *              in: query
+ *              type: string
+ *              description: text for search in title, text, short_text of products
  *      responses:
  *          200:
  *              description: success
@@ -140,7 +206,7 @@ router.delete("/remove/:id", ProductController.removeProductById);
  * /admin/product/add:
  *  post:
  *      tags: [Product(Admin-Panel)]
- *      summary: add new category
+ *      summary: add new product
  *      requestBody:
  *          required: true
  *          content:
@@ -152,8 +218,30 @@ router.delete("/remove/:id", ProductController.removeProductById);
  *              description: create new product
  */
 router.post("/add", uploadFile.array("images", 10), stringToArray("tags", "colors"), ProductController.addProduct);
-/* router.patch();
-router.delete(); */
+
+/**
+ * @swagger
+ * /admin/product/edit/{id}:
+ *  patch:
+ *      tags: [Product(Admin-Panel)]
+ *      summary: update priduct
+ *      parameters:
+ *          -   name: id
+ *              in: path
+ *              type: string
+ *              required: true
+ *              description: ObjectId of product for update
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      $ref: '#/components/schemas/EditProduct'
+ *      responses:
+ *          200:
+ *              description: update product
+ */
+router.patch("/edit/:id", uploadFile.array("images", 10), stringToArray("tags", "colors"), ProductController.editProduct);
 
 module.exports = {
     ProductRoutes : router,

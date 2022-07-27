@@ -3,9 +3,23 @@ const Controller = require("../controller");
 const path = require("path");
 const { ProductModel } = require("../../../models/product");
 const createError = require("http-errors");
-const { deleteFileInPublic, listOfImagesFromRequest, setFeatures } = require("../../../utils/functions");
+const { deleteFileInPublic, listOfImagesFromRequest, setFeatures, copyObject, deleteInvalidPropertyInObject } = require("../../../utils/functions");
 const { objectIdValiadator } = require("../../validators/public.validator");
 const { StatusCodes } = require("http-status-codes");
+
+const productBlackList = {
+    BOOKMARKS : "bookmarks",
+    LIKES : "likes",
+    DISLIKES : "dislikes",
+    COMMENTS : "comments",
+    SUPPLIER : "supplier",
+    COLORS : "colors",
+    WIDTH : "width",
+    WEIGHT : "weight",
+    HEIGHT : "height",
+    LENGTH : "length"
+};
+Object.freeze(productBlackList);
 
 class ProductController extends Controller{
     async addProduct(req, res, next){
@@ -42,7 +56,26 @@ class ProductController extends Controller{
         }
     }
     async editProduct(req, res, next){
-
+        try {
+            const { id } = req.params;
+            const product = await this.findProduct(id);
+            const data = copyObject(req.body);
+            data.images = listOfImagesFromRequest(req?.files || [], req.body.fileUploadPath);
+            data.features = setFeatures(req.body);
+            let blackListFields = Object.values(productBlackList);
+            deleteInvalidPropertyInObject(data, blackListFields);
+            const result = await ProductModel.updateOne({_id : product._id}, {$set: data});
+            if(result.modifiedCount == 0) throw createError.InternalServerError("خطای داخلی");
+            return res.status(StatusCodes.OK).json({
+                data: {
+                    statusCode: StatusCodes.OK,
+                    message: "به روزرسانی باموفقیت انجام شد"
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
     }
     async removeProductById(req, res, next){
         try {
@@ -62,7 +95,17 @@ class ProductController extends Controller{
     }
     async getAllProducts(req, res, next){
         try {
-            const products = await ProductModel.find({});
+            const search = req?.query?.search || "";
+            let products;
+            if(search){
+                products = await ProductModel.find({
+                    $text: {
+                        $search : new RegExp(search, "gi")
+                    }
+                });
+            }else {
+                products = await ProductModel.find({});
+            }
             return res.status(StatusCodes.OK).json({
                 data: {
                     statusCode: StatusCodes.OK,
