@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 const { CommentSchema } = require("./public.schema");
 
 const EpisodeSchema = new mongoose.Schema({
-    title : { type: string, required: true},
-    text : { type: string, required: true},
-    type: { type: string, default : "free"}, // cash / free
-    time : { type : string, required : true}
+    title : { type: String, required: true},
+    text : { type: String, required: true},
+    type: { type: String, default : "free"}, // cash / free
+    time : { type : String, required : true}
 })
 
 const ChapterSchema = new mongoose.Schema({
-    title : { type: string, required: true},
-    text : { type: string, default : ""},
+    title : { type: String, required: true},
+    text : { type: String, default : ""},
     episodes : { type: [EpisodeSchema], default : []}
 })
 
-const Schema = new mongoose.Schema({
+const CourseSchema = new mongoose.Schema({
     title : {type: String, required : true},
     short_text : {type: String, required : true},
     text : {type: String, required : true},
@@ -29,11 +29,14 @@ const Schema = new mongoose.Schema({
     discount : {type: Number, default : 0},
     type : {type: String, default : "free", required : true}, // cash / free / special students
     time : {type: String, default: "00:00:00"},
+    status : {type: String, default: "NotStarted"}, // NotStarted / Holding / Completed
     teacher : {type: mongoose.Types.ObjectId, ref : "user"},
-    chapter: { type: [ChapterSchema], default : []},
+    chapters: { type: [ChapterSchema], default : []},
     students : {type: [mongoose.Types.ObjectId], default : [], ref : "user"}
 });
 
+CourseSchema.index({title : "text", short_text : "text", text : "text"});
+
 module.exports = {
-    CourseModel : mongoose.model("course", Schema),
+    CourseModel : mongoose.model("course", CourseSchema),
 };
