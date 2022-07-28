@@ -25,8 +25,8 @@ class BlogController extends Controller{
             })
             if(!result) throw createError.InternalServerError("بلاگ جدید ایجاد نشد");
             return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
                 data: {
-                    statusCode: StatusCodes.CREATED,
                     message: "بلاگ جدید با موفقیت ایجاد شد"
                 }
             });
@@ -55,8 +55,8 @@ class BlogController extends Controller{
             const updateResult = await BlogModel.updateOne({_id : id}, {$set: data});
             if(updateResult.modifiedCount == 0) throw createError.InternalServerError("به روزرسانی انجام نشد");
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     message: "به روزرسانی باموفقیت انجام شد"
                 }
             });
@@ -72,8 +72,8 @@ class BlogController extends Controller{
             const result = await BlogModel.deleteOne({_id: id});
             if(result.deletedCount == 0) throw createError.InternalServerError("حذف مقاله انجام نشد");
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     message: "حذف مقاله با موفقیت انجام شد"
                 }
             });
@@ -119,8 +119,8 @@ class BlogController extends Controller{
                 }
             ])
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     blogs
                 }
             });
@@ -133,8 +133,8 @@ class BlogController extends Controller{
             const { id } = req.params;
             const blog = await this.findBlog({_id : id});
             return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
                 data: {
-                    statusCode : StatusCodes.OK,
                     blog
                 }
             });

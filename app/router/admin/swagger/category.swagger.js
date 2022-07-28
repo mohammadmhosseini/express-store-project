@@ -39,6 +39,10 @@
  *      responses:
  *          201:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */
 /**
  * @swagger
@@ -153,6 +157,10 @@
  *      responses:
  *          200:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */
 /**
  * @swagger
@@ -177,6 +185,10 @@
  *      responses:
  *          200:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  *          500:
  *              description: InternalServerError
  */

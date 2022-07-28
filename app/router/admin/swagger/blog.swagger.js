@@ -73,6 +73,10 @@
  *      responses:
  *          201:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */
 
 /**
@@ -110,6 +114,10 @@
  *      responses:
  *          200:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */
 
 /**
@@ -126,4 +134,8 @@
  *      responses:
  *          200:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */

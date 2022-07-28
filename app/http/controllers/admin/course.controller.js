@@ -18,8 +18,8 @@ class CourseController extends Controller{
             }).sort({_id : -1});
             else courses = await CourseModel.find({}).sort({_id : -1});
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     courses
                 }
             });
@@ -52,8 +52,8 @@ class CourseController extends Controller{
             })
             if(!course?._id) throw createError.InternalServerError("دوره ثبت نشد");
             return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
                 data: {
-                    statusCode: StatusCodes.CREATED,
                     message: "دوره باموفقیت ثبت شد"
                 }
             });
@@ -66,8 +66,8 @@ class CourseController extends Controller{
             const { id } = req.params;
             const course = await this.findCourse(id);
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     course
                 }
             });

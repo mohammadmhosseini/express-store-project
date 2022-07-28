@@ -45,8 +45,8 @@ class ProductController extends Controller{
             })
             if(!result) throw createError.InternalServerError("محصول جدید ایجاد نشد");
             return res.status(StatusCodes.CREATED).json({
+                statusCode: StatusCodes.CREATED,
                 data: {
-                    statusCode: StatusCodes.CREATED,
                     message: "محصول جدید باموفقیت ایجاد شد"
                 }
             });
@@ -67,8 +67,8 @@ class ProductController extends Controller{
             const result = await ProductModel.updateOne({_id : product._id}, {$set: data});
             if(result.modifiedCount == 0) throw createError.InternalServerError("خطای داخلی");
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     message: "به روزرسانی باموفقیت انجام شد"
                 }
             });
@@ -84,8 +84,8 @@ class ProductController extends Controller{
             const result = await ProductModel.deleteOne({ _id : product._id });
             if(result.deletedCount == 0) throw createError.InternalServerError("حذف محصول انجام نشد");
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     message: "محصول با موفقیت حذف شد"
                 }
             });
@@ -107,8 +107,8 @@ class ProductController extends Controller{
                 products = await ProductModel.find({});
             }
             return res.status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     products
                 }
             });
@@ -121,8 +121,8 @@ class ProductController extends Controller{
             const { id } = req.params;
             const product = await this.findProduct(id);
             return res. status(StatusCodes.OK).json({
+                statusCode: StatusCodes.OK,
                 data: {
-                    statusCode: StatusCodes.OK,
                     product
                 }
             });

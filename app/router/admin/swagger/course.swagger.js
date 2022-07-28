@@ -63,6 +63,72 @@
 
 /**
  * @swagger
+ *  definitions:
+ *      ListOfCourses:
+ *          type: object
+ *          properties:
+ *              statusCode:
+ *                  type: integer
+ *                  example: 200
+ *              data:
+ *                  type: object
+ *                  properties:
+ *                      courses:
+ *                          type: array
+ *                          items:
+ *                              type: object
+ *                              properties:
+ *                                  title:
+ *                                      type: string
+ *                                      example: "title of course"
+ *                                  text:
+ *                                      type: string
+ *                                      example: "text of course"
+ *                                  short_text:
+ *                                      type: string
+ *                                      example: "short_text of course"
+ *                                  category:
+ *                                      type: string
+ *                                      example: "category of course"
+ *                                  tags:
+ *                                      type: array
+ *                                      example: ["item1", "item2", ...]
+ *                                  status:
+ *                                      type: string
+ *                                      example: "status of course"
+ *                                  time:
+ *                                      type: string
+ *                                      example: "00:00:00"
+ *                                  type:
+ *                                      type: string
+ *                                      example: "Completed | Holding | NotStarted"
+ *                                  price:
+ *                                      type: integer
+ *                                      example: 25000
+ *                                  discount:
+ *                                      type: integer
+ *                                      example: 20
+ */
+
+/**
+ * @swagger
+ *  definitions:
+ *      publicDefinition:
+ *          type: object
+ *          properties:
+ *              statusCode:
+ *                  type: integer
+ *                  example: 20X
+ *              data:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: string
+ *                          example: "best message for that action"
+ */
+
+/**
+ * @swagger
  * /admin/course/list:
  *  get:
  *      tags: [Course(Admin-Panel)]
@@ -75,6 +141,10 @@
  *      responses:
  *          200:
  *              description: success
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/ListOfCourses'
  */
 
 /**
@@ -108,4 +178,8 @@
  *      responses:
  *          201:
  *              description: create new course
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */
