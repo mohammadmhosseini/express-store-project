@@ -183,3 +183,4 @@
  *                      schema:
  *                          $ref: '#/definitions/publicDefinition'
  */
+

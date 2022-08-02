@@ -1,10 +1,10 @@
-const { CourseModel } = require("../../../models/course");
-const Controller = require("../controller");
+const { CourseModel } = require("../../../../models/course");
+const Controller = require("../../controller");
 const { StatusCodes } = require("http-status-codes");
 const path = require("path");
-const { createCourseSchema } = require("../../validators/admin/course.schema");
-const { objectIdValiadator } = require("../../validators/public.validator");
+const { createCourseSchema } = require("../../../validators/admin/course.schema");
 const createError = require("http-errors");
+const { default: mongoose } = require("mongoose");
 
 class CourseController extends Controller{
     async getListOfCourses(req, res, next){
@@ -76,7 +76,7 @@ class CourseController extends Controller{
         }
     }
     async findCourse(courseId){
-        await objectIdValiadator.validateAsync({ id : courseId });
+        if(!mongoose.isValidObjectId(courseId)) throw createError.BadRequest("فرمت شناسه ارسال شده نادرست است");
         const course = await CourseModel.findById(courseId);
         if(!course) throw createError.NotFound("دوره یافت نشد")
         return course;
