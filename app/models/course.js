@@ -4,7 +4,7 @@ const { CommentSchema } = require("./public.schema");
 const EpisodeSchema = new mongoose.Schema({
     title : { type: String, required: true},
     text : { type: String, required: true},
-    type: { type: String, default : "free"}, // cash / free
+    type: { type: String, default : "unlock"}, // lock / unlock
     time : { type : String, required : true}
 })
 
