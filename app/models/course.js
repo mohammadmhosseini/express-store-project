@@ -33,6 +33,10 @@ const CourseSchema = new mongoose.Schema({
     teacher : {type: mongoose.Types.ObjectId, ref : "user"},
     chapters: { type: [ChapterSchema], default : []},
     students : {type: [mongoose.Types.ObjectId], default : [], ref : "user"}
+},{
+    toJSON : {
+        virtuals : true
+    }
 });
 
 CourseSchema.index({title : "text", short_text : "text", text : "text"});

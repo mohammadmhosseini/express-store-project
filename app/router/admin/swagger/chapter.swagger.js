@@ -17,6 +17,15 @@
  *                  text:
  *                      type: string
  *                      example: text to describe chapter
+ *          UpdateChapter:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      example: Chapter 1 basics of js
+ *                  text:
+ *                      type: string
+ *                      example: text to describe chapter
  */
 
 /**
@@ -111,4 +120,53 @@
  *                  application/json:
  *                      schema:
  *                          $ref: '#/definitions/ListOfChapters'
+ */
+
+/**
+ * @swagger
+ * /admin/chapter/remove/{chapterID}:
+ *  patch:
+ *      tags: [Chapter(Admin-Panel)]
+ *      summary: remove a chapter of course
+ *      parameters:
+ *          -   in: path
+ *              name: chapterID
+ *              type: string
+ *              required: true
+ *      responses:
+ *          200:
+ *              description: get chapters of course
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
+ */
+
+/**
+ * @swagger
+ * /admin/chapter/update/{chapterID}:
+ *  patch:
+ *      tags: [Chapter(Admin-Panel)]
+ *      summary: update details of chapter
+ *      parameters:
+ *          -   in: path
+ *              name: chapterID
+ *              type: string
+ *              required: true
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/x-www-form-urlencoded:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpdateChapter'
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpdateChapter'
+ *      responses:
+ *          200:
+ *              description: get chapters of course
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
  */

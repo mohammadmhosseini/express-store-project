@@ -9,10 +9,10 @@
  *          properties:
  *              title:
  *                  type: string
- *                  description: the title of category
+ *                  example: the title of category
  *              parent:
  *                  type: string
- *                  description: the parent of category
+ *                  example: the parent of category
  */
 /**
  * @swagger
@@ -176,7 +176,7 @@
  *      requestBody:
  *          required: true
  *          content:
- *              application/x-www-form-data:
+ *              application/x-www-form-urlencoded:
  *                  schema:
  *                      $ref: '#/components/schemas/UpsertCategory'
  *              application/json:
