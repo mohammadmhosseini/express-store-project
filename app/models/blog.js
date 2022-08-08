@@ -21,6 +21,10 @@ const Schema = new mongoose.Schema({
         virtual : true
     }
 });
+
+Schema.virtual("imageURL").get(function() {
+    return `${process.env.BASE_URL}:${process.env.APPLICATION_PORT}/${this.image}`;
+});
 Schema.virtual("category-detail", {
     ref: "category",
     localField : "category",
@@ -31,6 +35,7 @@ Schema.virtual("user", {
     localField : "author",
     foreignField : "_id"    
 });
+
 module.exports = {
     BlogModel : mongoose.model("blog", Schema),
 };
