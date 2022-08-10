@@ -59,6 +59,41 @@
  *                      example: 100
  *                  type:
  *                      $ref: '#/components/schemas/Type'
+ *          UpdateCourse:
+ *              type : object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: the title of course
+ *                      example: عنوان دوره
+ *                  short_text:
+ *                      type: string
+ *                      description: the summary of text of course 
+ *                      example: خلاصه توضیحات
+ *                  text:
+ *                      type: string
+ *                      description: the text of course
+ *                      example: توضیحات تکمیلی دوره
+ *                  category:
+ *                      type: string
+ *                      description: the category of course
+ *                      example: 62d5474a92edd949cc880f7d
+ *                  tags:
+ *                      type: array
+ *                      description: the tags of course
+ *                  image:
+ *                      type: string
+ *                      format: binary
+ *                  price:
+ *                      type: string
+ *                      description: the price of course
+ *                      example: 1000
+ *                  discount:
+ *                      type: string
+ *                      description: the discount of course
+ *                      example: 100
+ *                  type:
+ *                      $ref: '#/components/schemas/Type'
  */
 
 /**
@@ -184,3 +219,28 @@
  *                          $ref: '#/definitions/publicDefinition'
  */
 
+/**
+ * @swagger
+ * /admin/course/update/{id}:
+ *  patch:
+ *      tags: [Course(Admin-Panel)]
+ *      summary: update course and save
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              type: string
+ *              required: true
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              multipart/form-data:
+ *                  schema:
+ *                      $ref: '#/components/schemas/UpdateCourse'
+ *      responses:
+ *          201:
+ *              description: create new course
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/definitions/publicDefinition'
+ */

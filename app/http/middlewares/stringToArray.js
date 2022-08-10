@@ -23,7 +23,7 @@ const stringToArray = function(...args){
                 req.body[field] = [];
             }
         })
-        next()
+        next();
     }
 }
 module.exports = {

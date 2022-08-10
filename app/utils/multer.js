@@ -49,6 +49,7 @@ function videoFilter(req, file, cb){
 
 const fileMaxSize = 1 * 1000 * 1000; //1MB
 const videoMaxSize = 300 * 1000 * 1000; //300MB
+
 const uploadFile = multer({storage, fileFilter, limits: {fileSize : fileMaxSize}});
 const uploadVideo = multer({storage, videoFilter, limits: {fileSize : videoMaxSize}});
 

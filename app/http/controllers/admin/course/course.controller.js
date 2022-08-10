@@ -5,6 +5,19 @@ const path = require("path");
 const { createCourseSchema } = require("../../../validators/admin/course.schema");
 const createError = require("http-errors");
 const { default: mongoose } = require("mongoose");
+const {copyObject, deleteInvalidPropertyInObject, deleteFileInPublic} = require("../../../../utils/functions");
+
+const courseBlackList = {
+    LIKES : "likes",
+    DISLIKES : "dislikes",
+    BOOKMARKS : "bookmarks",
+    FILENAME : "filename",
+    FILEUPLOADPATH : "fileUploadPath",
+    STUDENTS : "students",
+    CHAPTERS : "chapters",
+    COMMENTS : "comments"
+};
+Object.freeze(courseBlackList);
 
 class CourseController extends Controller{
     async getListOfCourses(req, res, next){
@@ -60,7 +73,6 @@ class CourseController extends Controller{
                 discount, 
                 image,
                 teacher,
-                time : "00:00:00",
                 status: "NotStarted"
             })
             if(!course?._id) throw createError.InternalServerError("دوره ثبت نشد");
@@ -85,6 +97,33 @@ class CourseController extends Controller{
                 }
             });
         } catch (error) {
+            next(error)
+        }
+    }
+    async updateCourseById(req, res, next){
+        try {
+            const {id} = req.params;
+            const course = await this.findCourse(id);
+            const {filename, fileUploadPath} = req.body;
+            const data = copyObject(req.body);
+            let BlackListFields = Object.values(courseBlackList);
+            deleteInvalidPropertyInObject(data, BlackListFields);
+            if(req.file){
+                data.image = path.join(fileUploadPath, filename).replace(/\\/g, "/");
+                deleteFileInPublic(course.image);
+            }
+            const updateCourseResult = await CourseModel.updateOne({_id : id}, {
+                $set : data
+            });
+            if(!updateCourseResult.modifiedCount) throw createError.InternalServerError("ویرایش دوره انجام نشد");
+            return res.status(StatusCodes.OK).json({
+                statusCode : StatusCodes.OK,
+                data: {
+                    message: "ویرایش دوره با موفقیت انجام شد"
+                }
+            });
+        } catch (error) {
+            console.log(error);
             next(error)
         }
     }
